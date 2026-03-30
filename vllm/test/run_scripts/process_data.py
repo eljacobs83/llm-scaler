@@ -121,22 +121,19 @@ if __name__ == '__main__':
         "Total Token Throughput (tok/s)", "Mean TTFT (ms)", "Mean TPOT (ms)", "Mean ITL (ms)"
     ]
 
-    if add_config_header:
-        headers = config_headers+result_headers
-    else:
-        headers = result_headers
+    headers = config_headers + result_headers if add_config_header else result_headers
+    row_prefix = config_info if add_config_header else ""
     
-
+    # NOTE: Row data columns must exactly match header columns.
     with open(f'{filename}_unrounded.csv', 'a') as f:
         if f.tell() == 0:
             f.write(", ".join(headers) + '\n')
         for result in results:
-            f.write(config_info + ", ".join(map(str, result)) + '\n')
+            f.write(row_prefix + ", ".join(map(str, result)) + '\n')
 
     with open(f'{filename}.csv', 'a') as f:
         if f.tell() == 0:
             f.write(", ".join(headers) + '\n')
         for result in results:
-            f.write(config_info + ", ".join(f'{value:.2f}' if isinstance(value, float) else str(value) for value in result) + '\n')
-
+            f.write(row_prefix + ", ".join(f'{value:.2f}' if isinstance(value, float) else str(value) for value in result) + '\n')
 

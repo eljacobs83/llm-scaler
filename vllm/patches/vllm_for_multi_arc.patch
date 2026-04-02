@@ -11174,11 +11174,28 @@ index fe0850771..5101bbd9d 100644
              raise RuntimeError(f"Not support device type: {self.device_config.device}")
 
 +        ENV_CCL_ZE_IPC_EXCHANGE = os.getenv("CCL_ZE_IPC_EXCHANGE", "pidfd")
-         ENV_CCL_ATL_TRANSPORT = os.getenv("CCL_ATL_TRANSPORT", "ofi")
-         ENV_LOCAL_WORLD_SIZE = os.getenv(
-             "LOCAL_WORLD_SIZE", str(self.parallel_config.world_size)
-         )
++        ENV_CCL_ATL_TRANSPORT = "ofi"
++        ENV_RANK = os.getenv("RANK", str(self.rank))
++        ENV_WORLD_SIZE = os.getenv("WORLD_SIZE",
++                                   str(self.parallel_config.world_size))
++        ENV_LOCAL_WORLD_SIZE = os.getenv(
++            "LOCAL_WORLD_SIZE", str(self.parallel_config.world_size)
++        )
++        ENV_LOCAL_RANK = str(self.local_rank)
++
 +        os.environ["CCL_ZE_IPC_EXCHANGE"] = ENV_CCL_ZE_IPC_EXCHANGE
-         os.environ["CCL_ATL_TRANSPORT"] = ENV_CCL_ATL_TRANSPORT
-         os.environ["LOCAL_WORLD_SIZE"] = ENV_LOCAL_WORLD_SIZE
-         os.environ["LOCAL_RANK"] = str(self.local_rank)
++        os.environ["CCL_ATL_TRANSPORT"] = ENV_CCL_ATL_TRANSPORT
++        os.environ["RANK"] = ENV_RANK
++        os.environ["WORLD_SIZE"] = ENV_WORLD_SIZE
++        os.environ["LOCAL_WORLD_SIZE"] = ENV_LOCAL_WORLD_SIZE
++        os.environ["LOCAL_RANK"] = ENV_LOCAL_RANK
++
++        logger.info(
++            "XPU worker dist env: rank=%s local_rank=%s world_size=%s "
++            "local_world_size=%s CCL_ATL_TRANSPORT=%s",
++            ENV_RANK,
++            ENV_LOCAL_RANK,
++            ENV_WORLD_SIZE,
++            ENV_LOCAL_WORLD_SIZE,
++            ENV_CCL_ATL_TRANSPORT,
++        )

@@ -43,6 +43,7 @@ RUN apt-get update -y && \
 WORKDIR /llm
 COPY ./patches/vllm_for_multi_arc.patch /tmp/
 COPY ./patches/fix_registry_subprocess_env.patch /tmp/
+COPY ./patches/gemma4-buffer-loading-fix.patch /tmp/
 # COPY ./patches/miner-u.patch /tmp/
 
 # Set environment variables early
@@ -59,6 +60,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     cd vllm && \
     patch -p1 -l --no-backup-if-mismatch -r /dev/null < /tmp/vllm_for_multi_arc.patch && \
     patch -p1 -l --no-backup-if-mismatch -r /dev/null < /tmp/fix_registry_subprocess_env.patch && \
+    patch -p1 -l --no-backup-if-mismatch -r /dev/null < /tmp/gemma4-buffer-loading-fix.patch && \
     pip install -r requirements/xpu.txt && \
     pip install arctic-inference==0.1.1 && \
     # pip install --no-cache-dir arctic-inference==0.1.1 && \

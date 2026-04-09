@@ -53,7 +53,7 @@ RUN apt-get update && apt-get install -y \
 ENV LD_LIBRARY_PATH="/usr/local/lib:/usr/local/lib/python3.10/dist-packages/torch/lib:$LD_LIBRARY_PATH"
 
 RUN pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 --index-url https://download.pytorch.org/whl/xpu && \
-    pip install tqdm huggingface_hub modelscope einops transformers==4.53.3 sentencepiece && \
+    pip install tqdm huggingface_hub modelscope einops transformers==5.5.0 sentencepiece && \
     apt remove python3-blinker -y 
 
 COPY ./patches/qwen_image_for_multi_arc.patch /tmp/

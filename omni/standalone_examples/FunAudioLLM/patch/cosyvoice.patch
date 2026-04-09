@@ -220,7 +220,8 @@ index f776cbf..bf76ba5 100644
 -tensorrt-cu12-libs==10.13.3.9; sys_platform == 'linux'
 -torch==2.3.1
 -torchaudio==2.3.1
- transformers==4.51.3
+-transformers==4.51.3
++transformers==5.5.0
  uvicorn==0.30.0
 -wetext==0.0.4
 +wetext==0.1.2

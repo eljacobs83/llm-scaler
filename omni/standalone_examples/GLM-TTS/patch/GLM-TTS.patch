@@ -119,7 +119,8 @@ index a0c9293..a2562f6 100644
 -torchvision==0.18.1
  tqdm==4.66.4
  train==0.0.5
- transformers==4.57.3
+-transformers==4.57.3
++transformers==5.5.0
  wandb==0.16.6
 -WeTextProcessing==1.0.3
  x_transformers==1.42.26

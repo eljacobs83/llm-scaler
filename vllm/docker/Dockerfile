@@ -100,10 +100,10 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     pip install accelerate hf_transfer 'modelscope!=1.15.0'
 
 
-# Pin transformers version to avoid conflict in vLLM
+# Install transformers
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install librosa soundfile decord && \
-    pip install git+https://github.com/huggingface/transformers.git && \
+    pip install transformers==5.5.0 && \
     pip install ijson
 
 RUN --mount=type=cache,target=/root/.cache/pip \

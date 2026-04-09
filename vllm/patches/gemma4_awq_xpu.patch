@@ -1,0 +1,24 @@
+diff --git a/vllm/model_executor/models/transformers/multimodal.py b/vllm/model_executor/models/transformers/multimodal.py
+index fcf9a0d..c7e396c 100644
+--- a/vllm/model_executor/models/transformers/multimodal.py
++++ b/vllm/model_executor/models/transformers/multimodal.py
+@@ -276,6 +276,7 @@ class MultiModalMixin(SupportsMultiModal, SupportsMRoPE):
+             "language_model.model": "model.language_model",
+             "text_model.model": "model.text_model",
+             "vision_tower": "model.vision_tower",
++            "embed_vision": "model.embed_vision",
+             "vqmodel": "model.vqmodel",
+             "visual": "model.visual",
+             "vision_model": "model.vision_model",
+diff --git a/vllm/model_executor/models/utils.py b/vllm/model_executor/models/utils.py
+index f25ab91..bd8474d 100644
+--- a/vllm/model_executor/models/utils.py
++++ b/vllm/model_executor/models/utils.py
+@@ -271,6 +271,7 @@ class AutoWeightsLoader:
+ 
+         child_modules = dict(module.named_children())
+         child_params = dict(module.named_parameters(recurse=False))
++        child_params.update(dict(module.named_buffers(recurse=False)))
+ 
+         # Add missing tensors the weight loader needs to be able to load
+         # that aren't registered as params, e.g., batchnorm statistics.

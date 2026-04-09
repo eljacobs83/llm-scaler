@@ -549,7 +549,7 @@ if want to process image in server local, you can `"url": "file:/llm/models/test
 
 #### Install audio dependencies
 ```bash
-pip install transformers==4.52.4 librosa
+pip install transformers==5.5.0 librosa
 ```
 
 #### Start service using V0 engine
@@ -1148,7 +1148,7 @@ crontab -l | grep -v "vllm_bootstrap_and_rotate.sh" | crontab -
 | Multimodal Model     | zai-org/Glyph                              |  ✅  |         ✅         |          ✅          |       |                           |
 | Multimodal Model     | opendatalab/MinerU2.5-2509-1.2B            |  ✅  |         ✅         |          ✅          |       |                           |
 | Multimodal Model     | baidu/ERNIE-4.5-VL-28B-A3B-Thinking        |  ✅  |         ✅         |          ✅          |       |                           |
-| Multimodal Model     | zai-org/GLM-4.6V-Flash                     |  ✅  |         ✅         |          ✅          |       |   pip install transformers==5.0.0rc0 first            |
+| Multimodal Model     | zai-org/GLM-4.6V-Flash                     |  ✅  |         ✅         |          ✅          |       |   pip install transformers==5.5.0 first            |
 | Multimodal Model     | PaddlePaddle/PaddleOCR-VL                  |  ✅  |         ✅         |          ✅          |       |  follow the guide in [here](OCR/README.md#3-paddler-ocr-support)     |
 | Multimodal Model     | deepseek-ai/DeepSeek-OCR                   |  ✅  |         ✅         |          ✅          |       |                           |
 | Multimodal Model     | deepseek-ai/DeepSeek-OCR-2                 |  ✅  |         ✅         |          ✅          |       |  There may be accuracy issues when using `--quantization fp8`             |
@@ -1172,7 +1172,7 @@ crontab -l | grep -v "vllm_bootstrap_and_rotate.sh" | crontab -
 ### 3.1 how to use Hunyuan-7B-Instruct 
 install new transformers version
 ```bash
-pip install transformers==4.56.1
+pip install transformers==5.5.0
 ```
 
 Need to use the followng format like [here](https://huggingface.co/tencent/Hunyuan-7B-Instruct#use-with-transformers), and you can decide to use `think` or not.

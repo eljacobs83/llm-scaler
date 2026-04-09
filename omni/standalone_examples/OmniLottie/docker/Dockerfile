@@ -33,6 +33,6 @@ RUN mkdir -p /llm && \
     cd /llm && \
     git clone https://github.com/OpenVGLab/OmniLottie.git && \
     cd ./OmniLottie && \
-    pip install transformers==4.51.3
+    pip install transformers==5.5.0
 
 WORKDIR /llm/OmniLottie

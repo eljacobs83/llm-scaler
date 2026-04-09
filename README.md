@@ -102,7 +102,7 @@ Please follow the instructions in the [Getting Started](vllm/README.md/#1-gettin
 | Multimodal Model     | zai-org/Glyph                              |  ✅  |         ✅         |          ✅          |       |                           |
 | Multimodal Model     | opendatalab/MinerU2.5-2509-1.2B            |  ✅  |         ✅         |          ✅          |       |                           |
 | Multimodal Model     | baidu/ERNIE-4.5-VL-28B-A3B-Thinking        |  ✅  |         ✅         |          ✅          |       |                           |
-| Multimodal Model     | zai-org/GLM-4.6V-Flash                     |  ✅  |         ✅         |          ✅          |       |   pip install transformers==5.0.0rc0 first            |
+| Multimodal Model     | zai-org/GLM-4.6V-Flash                     |  ✅  |         ✅         |          ✅          |       |   pip install transformers==5.5.0 first            |
 | Multimodal Model     | PaddlePaddle/PaddleOCR-VL                  |  ✅  |         ✅         |          ✅          |       |  follow the guide in [here](./vllm/README.md#32-how-to-use-paddleocr)     |
 | Multimodal Model     | deepseek-ai/DeepSeek-OCR                   |  ✅  |         ✅         |          ✅          |       |                           |
 | Multimodal Model     | deepseek-ai/DeepSeek-OCR-2                 |  ✅  |         ✅         |          ✅          |       |  There may be accuracy issues when using `--quantization fp8`             |

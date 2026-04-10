@@ -1,11 +1,11 @@
 diff --git a/vllm/model_executor/models/transformers/base.py b/vllm/model_executor/models/transformers/base.py
-index 4d4596a..8f20d16 100644
+index d094bb289..98fd81f30 100644
 --- a/vllm/model_executor/models/transformers/base.py
 +++ b/vllm/model_executor/models/transformers/base.py
-@@ -337,6 +337,20 @@ class Base(nn.Module, VllmModel, SupportsQuant, SupportsLoRA, SupportsPP,
-             layers[i] = PPMissingLayer()
+@@ -269,8 +269,23 @@ class Base(
+ 
          # Layers after module list
-         for name in pp_plan[module_list_idx + 1:]:
+         for name in pp_plan[module_list_idx + 1 :]:
 +            # Keep non-text multimodal towers (e.g. Gemma4 `embed_vision`) on all
 +            # PP ranks. They are small and are referenced during weight loading
 +            # even when text layers are partitioned.
@@ -24,10 +24,11 @@ index 4d4596a..8f20d16 100644
              # Modules that should be on last rank
 -            if not self.pp_group.is_last_rank:
 +            if not self.pp_group.is_last_rank and is_text_path:
-                 # attrsetter in case the module is nested (e.g. "text_model.norm")
-                 attrsetter(name)(self.model, PPMissingLayer())
+                 setattr(self.model, name, PPMissingLayer())
+ 
+     def recursive_replace(self):
 diff --git a/vllm/model_executor/models/transformers/multimodal.py b/vllm/model_executor/models/transformers/multimodal.py
-index fcf9a0d..c7e396c 100644
+index fcf9a0d07..c7e396c28 100644
 --- a/vllm/model_executor/models/transformers/multimodal.py
 +++ b/vllm/model_executor/models/transformers/multimodal.py
 @@ -276,6 +276,7 @@ class MultiModalMixin(SupportsMultiModal, SupportsMRoPE):
@@ -38,33 +39,3 @@ index fcf9a0d..c7e396c 100644
              "vqmodel": "model.vqmodel",
              "visual": "model.visual",
              "vision_model": "model.vision_model",
-diff --git a/vllm/model_executor/models/utils.py b/vllm/model_executor/models/utils.py
-index f25ab91..14b08f9 100644
---- a/vllm/model_executor/models/utils.py
-+++ b/vllm/model_executor/models/utils.py
-@@ -15,6 +15,7 @@
- import gc
- import itertools
- import logging
-+import os
- import time
- from collections import defaultdict
- from collections.abc import Iterable, Iterator
-@@ -268,9 +269,17 @@ class AutoWeightsLoader:
-         if isinstance(module, PPMissingLayer):
-             return
- 
-         child_modules = dict(module.named_children())
-+        if os.getenv("VLLM_DEBUG_WEIGHT_TREE", "") and base_prefix in ("", "model"):
-+            logger.warning(
-+                "DEBUG _load_module prefix=%r children=%s",
-+                base_prefix,
-+                list(child_modules.keys())[:20],
-+            )
-+
-         child_params = dict(module.named_parameters(recurse=False))
-+        child_params.update(dict(module.named_buffers(recurse=False)))
- 
-         # Add missing tensors the weight loader needs to be able to load
-         # that aren't registered as params, e.g., batchnorm statistics.
-         for child_prefix, child_weights in self._groupby_prefix(weights):

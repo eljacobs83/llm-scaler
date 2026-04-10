@@ -1,0 +1,41 @@
+diff --git a/vllm/model_executor/models/transformers/base.py b/vllm/model_executor/models/transformers/base.py
+index d094bb289..98fd81f30 100644
+--- a/vllm/model_executor/models/transformers/base.py
++++ b/vllm/model_executor/models/transformers/base.py
+@@ -269,8 +269,23 @@ class Base(
+ 
+         # Layers after module list
+         for name in pp_plan[module_list_idx + 1 :]:
++            # Keep non-text multimodal towers (e.g. Gemma4 `embed_vision`) on all
++            # PP ranks. They are small and are referenced during weight loading
++            # even when text layers are partitioned.
++            #
++            # Only prune attributes that are under the language/text subtrees.
++            # This preserves model-level vision modules and avoids load-time
++            # failures such as:
++            #   ValueError: There is no module or parameter named
++            #   'model.embed_vision.embedding_projection.weight'
++            is_text_path = (
++                name.startswith("language_model")
++                or name.startswith("text_model")
++                or name.startswith("model.language_model")
++                or name.startswith("model.text_model")
++            )
+             # Modules that should be on last rank
+-            if not self.pp_group.is_last_rank:
++            if not self.pp_group.is_last_rank and is_text_path:
+                 setattr(self.model, name, PPMissingLayer())
+ 
+     def recursive_replace(self):
+diff --git a/vllm/model_executor/models/transformers/multimodal.py b/vllm/model_executor/models/transformers/multimodal.py
+index fcf9a0d07..c7e396c28 100644
+--- a/vllm/model_executor/models/transformers/multimodal.py
++++ b/vllm/model_executor/models/transformers/multimodal.py
+@@ -276,6 +276,7 @@ class MultiModalMixin(SupportsMultiModal, SupportsMRoPE):
+             "language_model.model": "model.language_model",
+             "text_model.model": "model.text_model",
+             "vision_tower": "model.vision_tower",
++            "embed_vision": "model.embed_vision",
+             "vqmodel": "model.vqmodel",
+             "visual": "model.visual",
+             "vision_model": "model.vision_model",

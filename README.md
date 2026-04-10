@@ -96,6 +96,10 @@ Please follow the instructions in the [Getting Started](vllm/README.md/#1-gettin
 | Multimodal Model     | ByteDance-Seed/UI-TARS-7B-DPO              |  ✅  |         ✅         |          ✅          |       |                           |
 | Multimodal Model     | google/gemma-3-12b-it                      |      |         ✅         |                      |       |  use bfloat16  |
 | Multimodal Model     | google/gemma-3-27b-it                      |      |         ✅         |                      |       |  use bfloat16  |
+| Multimodal Model     | google/gemma-4-E2B-it                      |      |         ✅         |                      |       |  use bfloat16 / transformers==5.5.0  |
+| Multimodal Model     | google/gemma-4-E4B-it                      |      |         ✅         |                      |       |  use bfloat16 / transformers==5.5.0  |
+| Multimodal Model     | google/gemma-4-31B-it                      |      |         ✅         |                      |       |  use bfloat16 / transformers==5.5.0  |
+| Multimodal MOE Model | google/gemma-4-26B-A4B-it                  |      |         ✅         |                      |       |  use bfloat16 / transformers==5.5.0  |
 | Multimodal Model     | THUDM/GLM-4v-9B                            |  ✅  |         ✅         |          ✅         |       |  with --hf-overrides and chat_template  |
 | Multimodal Model     | zai-org/GLM-4.1V-9B-Base                   |  ✅  |         ✅         |          ✅          |       |                           |
 | Multimodal Model     | zai-org/GLM-4.1V-9B-Thinking               |  ✅  |         ✅         |          ✅          |       |                           |

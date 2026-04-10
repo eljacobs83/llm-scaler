@@ -1142,6 +1142,10 @@ crontab -l | grep -v "vllm_bootstrap_and_rotate.sh" | crontab -
 | Multimodal Model     | ByteDance-Seed/UI-TARS-7B-DPO              |  ✅  |         ✅         |          ✅          |       |                           |
 | Multimodal Model     | google/gemma-3-12b-it                      |      |         ✅         |                      |       |  use bfloat16  |
 | Multimodal Model     | google/gemma-3-27b-it                      |      |         ✅         |                      |       |  use bfloat16  |
+| Multimodal Model     | google/gemma-4-E2B-it                      |      |         ✅         |                      |       |  use bfloat16 / transformers==5.5.0  |
+| Multimodal Model     | google/gemma-4-E4B-it                      |      |         ✅         |                      |       |  use bfloat16 / transformers==5.5.0  |
+| Multimodal Model     | google/gemma-4-31B-it                      |      |         ✅         |                      |       |  use bfloat16 / transformers==5.5.0  |
+| Multimodal MOE Model | google/gemma-4-26B-A4B-it                  |      |         ✅         |                      |       |  use bfloat16 / transformers==5.5.0  |
 | Multimodal Model     | THUDM/GLM-4v-9B                            |  ✅  |         ✅         |          ✅         |       |  with --hf-overrides and chat_template  |
 | Multimodal Model     | zai-org/GLM-4.1V-9B-Base                   |  ✅  |         ✅         |          ✅          |       |                           |
 | Multimodal Model     | zai-org/GLM-4.1V-9B-Thinking               |  ✅  |         ✅         |          ✅          |       |                           |
@@ -1169,7 +1173,32 @@ crontab -l | grep -v "vllm_bootstrap_and_rotate.sh" | crontab -
 
 --- 
 
-### 3.1 how to use Hunyuan-7B-Instruct 
+### 3.1 how to use Gemma 4
+
+Gemma 4 model support follows the upstream vLLM recipe guidance from [vllm-project/recipes/Google/Gemma4.md](https://github.com/vllm-project/recipes/blob/main/Google/Gemma4.md).
+
+Install or upgrade transformers first:
+```bash
+pip install transformers==5.5.0
+```
+
+Run the service with BF16 and an explicit context window (up to 131072 for E2B/E4B, or 32768 recommended for 31B/26B-A4B):
+```bash
+vllm serve google/gemma-4-E4B-it \
+  --dtype bfloat16 \
+  --max-model-len 131072
+```
+
+For larger models, use tensor parallelism when needed:
+```bash
+vllm serve google/gemma-4-31B-it \
+  --dtype bfloat16 \
+  --tensor-parallel-size 2 \
+  --max-model-len 32768 \
+  --gpu-memory-utilization 0.90
+```
+
+### 3.2 how to use Hunyuan-7B-Instruct
 install new transformers version
 ```bash
 pip install transformers==5.5.0

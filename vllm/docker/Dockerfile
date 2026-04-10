@@ -59,10 +59,10 @@ RUN python3 -m pip config set global.break-system-packages true
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone -b v0.19.0 https://github.com/vllm-project/vllm.git && \
     cd vllm && \
-    patch -p1 -l --no-backup-if-mismatch -r /dev/null < /tmp/vllm-xpu.patch && \
-    patch -p1 -l --no-backup-if-mismatch -r /dev/null < /tmp/fix_registry_subprocess_env.patch && \
-    patch -p1 -l --no-backup-if-mismatch -r /dev/null < /tmp/gemma4-buffer-loading-fix.patch && \
-    patch -p1 -l --no-backup-if-mismatch -r /dev/null < /tmp/gemma4_awq_xpu.patch && \
+    (patch -p1 -l --batch --no-backup-if-mismatch -r /dev/null < /tmp/vllm-xpu.patch || true) && \
+    (patch -p1 -l --batch --no-backup-if-mismatch -r /dev/null < /tmp/fix_registry_subprocess_env.patch || true) && \
+    (patch -p1 -l --batch --no-backup-if-mismatch -r /dev/null < /tmp/gemma4-buffer-loading-fix.patch || true) && \
+    (patch -p1 -l --batch --no-backup-if-mismatch -r /dev/null < /tmp/gemma4_awq_xpu.patch || true) && \
     pip install -r requirements/xpu.txt && \
     pip install arctic-inference==0.1.1 && \
     # pip install --no-cache-dir arctic-inference==0.1.1 && \

@@ -41,7 +41,7 @@ RUN apt-get update -y && \
 # RUN   echo "source /opt/intel/oneapi/ccl/2021.15.7-down.1/env/vars.sh --force" >> /root/.bashrc
 
 WORKDIR /llm
-COPY ./patches/vllm_for_multi_arc.patch /tmp/
+COPY ./patches/ai-dynamo-xpu/patches/vllm-xpu.patch /tmp/
 COPY ./patches/fix_registry_subprocess_env.patch /tmp/
 COPY ./patches/gemma4-buffer-loading-fix.patch /tmp/
 COPY ./patches/gemma4_awq_xpu.patch /tmp/
@@ -57,9 +57,9 @@ RUN python3 -m pip config set global.break-system-packages true
 
 # Clone + patch vllm
 RUN --mount=type=cache,target=/root/.cache/pip \
-    git clone -b v0.14.0 https://github.com/vllm-project/vllm.git && \
+    git clone -b v0.19.0 https://github.com/vllm-project/vllm.git && \
     cd vllm && \
-    patch -p1 -l --no-backup-if-mismatch -r /dev/null < /tmp/vllm_for_multi_arc.patch && \
+    patch -p1 -l --no-backup-if-mismatch -r /dev/null < /tmp/vllm-xpu.patch && \
     patch -p1 -l --no-backup-if-mismatch -r /dev/null < /tmp/fix_registry_subprocess_env.patch && \
     patch -p1 -l --no-backup-if-mismatch -r /dev/null < /tmp/gemma4-buffer-loading-fix.patch && \
     patch -p1 -l --no-backup-if-mismatch -r /dev/null < /tmp/gemma4_awq_xpu.patch && \

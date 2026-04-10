@@ -1,0 +1,14 @@
+diff --git a/vllm/model_executor/models/utils.py b/vllm/model_executor/models/utils.py
+--- a/vllm/model_executor/models/utils.py
++++ b/vllm/model_executor/models/utils.py
+@@ -259,6 +259,10 @@ class AutoWeightsLoader:
+         child_modules = dict(module.named_children())
+         child_params = dict(module.named_parameters(recurse=False))
+
++        # Include registered buffers so checkpoint keys like layer_scalar
++        # (Gemma4 per-layer embeddings) are recognised as valid load targets.
++        child_params.update(dict(module.named_buffers(recurse=False)))
++
+         # Add missing tensors the weight loader needs to be able to load
+         # that aren't registered as params, e.g., batchnorm statistics.
+         self._add_loadable_non_param_tensors(module, child_params)
